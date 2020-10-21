@@ -12,12 +12,14 @@ import retrofit2.converter.moshi.MoshiConverterFactory
  * description：(用一句话描述)
  */
 object WebAccess {
+
     val partsApi: PartsApiClient by lazy {
         Log.d("WebAccess", "Creating retrofit client")
         val retrofit = Retrofit.Builder()
             .baseUrl("http://10.0.2.2:3000/")
             .addConverterFactory(MoshiConverterFactory.create())
             .addCallAdapterFactory(CoroutineCallAdapterFactory())
+            .client(OkHttpClientFactory.getInstance(null, true))
             .build()
         return@lazy retrofit.create(PartsApiClient::class.java)
     }

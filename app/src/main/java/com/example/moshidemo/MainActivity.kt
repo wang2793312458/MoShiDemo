@@ -6,11 +6,9 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import java.io.IOException
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.*
 
 class MainActivity : AppCompatActivity() {
     private val tag: String = MainActivity::class.java.simpleName
@@ -30,6 +28,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadPartsAndUpdateList() {
         GlobalScope.launch(Dispatchers.Main) {
+            withContext(Dispatchers.IO){
+
+            }
             try {
                 val webResponse = WebAccess.partsApi.getPartsAsync().await()
 
@@ -74,5 +75,9 @@ class MainActivity : AppCompatActivity() {
         startActivity(showDetailActivityIntent)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        GlobalScope.cancel()
+    }
 
 }
