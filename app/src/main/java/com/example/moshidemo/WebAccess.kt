@@ -2,6 +2,8 @@ package com.example.moshidemo
 
 import android.util.Log
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
@@ -17,7 +19,13 @@ object WebAccess {
         Log.d("WebAccess", "Creating retrofit client")
         val retrofit = Retrofit.Builder()
             .baseUrl("http://10.0.2.2:3000/")
-            .addConverterFactory(MoshiConverterFactory.create())
+            .addConverterFactory(
+                MoshiConverterFactory.create(
+                    Moshi.Builder()
+                        .add(KotlinJsonAdapterFactory())
+                        .build()
+                )
+            )
             .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .client(OkHttpClientFactory.getInstance(null, true))
             .build()
